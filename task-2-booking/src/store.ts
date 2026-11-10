@@ -13,6 +13,16 @@ export const services: Service[] = load('services.json');
 
 const bookings: Booking[] = load('bookings.json');
 
+let bookingSeq = bookings.reduce((max, b) => {
+  const n = Number(b.id.replace(/^bk-/, ''));
+  return Number.isFinite(n) ? Math.max(max, n) : max;
+}, 0);
+
+export function nextBookingId(): string {
+  bookingSeq += 1;
+  return `bk-${bookingSeq}`;
+}
+
 // Имитация сетевой задержки до БД. Не убирать: в проде запросы тоже не мгновенные.
 const latency = () => new Promise((r) => setTimeout(r, 5 + Math.random() * 15));
 
